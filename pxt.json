@@ -1,15 +1,18 @@
 {
-    "name": "blank",
-    "description": "",
+    "name": "Sound Level in decibels (dB)",
+    "description": "Get the micro:bit V2 sound level in decibels (dB)",
     "dependencies": {
         "core": "*",
-        "radio": "*",
         "microphone": "*"
     },
     "files": [
-        "main.blocks",
-        "main.ts",
+        "soundleveldb.cpp",
+        "shims.d.ts",
         "README.md"
+    ],
+    "testFiles": [
+        "main.blocks",
+        "main.ts"
     ],
     "targetVersions": {
         "branch": "v7.0.51",
