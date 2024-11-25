@@ -5,9 +5,6 @@
 #include "LevelDetectorSPL.h"
 #endif
 
-#define MICROPHONE_MIN 52.0f
-#define MICROPHONE_MAX 120.0f
-
 namespace input {
 /**
 * Reads the loudness through the microphone in decibels (dB).
@@ -19,12 +16,10 @@ namespace input {
 //% group="micro:bit (V2)"
 int soundLevelDb() {
 #if MICROBIT_CODAL
-    LevelDetectorSPL* level = uBit.audio.levelSPL;
-    if (NULL == level)
-        return 0;
-    const int micValue = level->getValue();
-    const int scaled = max(MICROPHONE_MIN, min(micValue, MICROPHONE_MAX)) - MICROPHONE_MIN;
-    return min(0xff, scaled * 0xff / (MICROPHONE_MAX - MICROPHONE_MIN));
+    int originalUnit = uBit.audio.levelSPL->unit;
+    float soundDb = uBit.audio.levelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
+    uBit.audio.levelSPL->unit = originalUnit;
+    return (int)soundDb;
 #else
     target_panic(PANIC_VARIANT_NOT_SUPPORTED);
     return 0;
