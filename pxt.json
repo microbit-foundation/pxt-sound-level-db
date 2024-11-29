@@ -1,6 +1,8 @@
 {
     "name": "Sound Level in decibels (dB)",
+    "version": "0.1.0",
     "description": "Get the micro:bit V2 sound level in decibels (dB)",
+    "license": "MIT",
     "dependencies": {
         "core": "*",
         "microphone": "*"
@@ -14,6 +16,10 @@
     "testFiles": [
         "main.blocks",
         "main.ts"
+    ],
+    "public": true,
+    "supportedTargets": [
+        "microbit"
     ],
     "targetVersions": {
         "branch": "v7.0.51",
