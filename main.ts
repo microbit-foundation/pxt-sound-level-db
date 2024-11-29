@@ -1,4 +1,6 @@
 basic.forever(function () {
-    serial.writeLine("" + (input.soundLevel()))
-    serial.writeLine("" + (input.soundLevelDb()) + " dB\n")
+    let dbOriginal = input.soundLevelDbOriginal()
+    let dbFinal = input.soundLevelDb()
+    serial.writeLine("" + dbOriginal + ", " + dbFinal)
+    basic.pause(100)
 })
