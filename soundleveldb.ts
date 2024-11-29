@@ -4,18 +4,18 @@
 */
 namespace input {
     /**
-     * How many bananas?
-     *
-     * This function is fully implemented in TypeScript.
-     *
-     * @param n number of bananas
+     * Reads the loudness through the microphone in decibels (dB).
      */
     //% blockId=input_soundLevelDbOriginal
     //% shim=input::soundLevelDbC
-    //% block="how many bananas $n"
+    //% block="sound level (dB)"
+    //% parts="microphone"
+    //% weight=13 blockGap=8
+    //% advanced=true
+    //% group="micro:bit (V2)"
     export function soundLevelDb(): number {
         const MICROPHONE_MIN = 52.0;
         const MICROPHONE_MAX = 120.0;
-        return (input.soundLevel() * (MICROPHONE_MAX-MICROPHONE_MIN) / 255.0) + MICROPHONE_MIN;
+        return Math.floor(input.soundLevel() * (MICROPHONE_MAX-MICROPHONE_MIN) / 255.0) + MICROPHONE_MIN;
     }
 }
