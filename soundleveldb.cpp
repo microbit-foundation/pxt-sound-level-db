@@ -6,9 +6,9 @@
 
 namespace input {
 /**
-* IGNORE THIS VERSION.
+* IGNORE THIS VERSION, only used for testing.
 */
-//%
+// <-- During testing you can add the % sign here to export it to TS
 int soundLevelDbOriginal() {
 #if MICROBIT_CODAL
     int originalUnit = uBit.audio.levelSPL->unit;

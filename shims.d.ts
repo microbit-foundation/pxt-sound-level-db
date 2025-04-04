@@ -2,10 +2,10 @@
 declare namespace input {
 
     /**
-     * IGNORE THIS VERSION.
+     * IGNORE THIS VERSION, only used for testing.
      */
-    //% shim=input::soundLevelDbOriginal
-    function soundLevelDbOriginal(): int32;
+    //% blockId=device_get_sound_level_db shim=input::soundLevelDbC
+    function soundLevelDbC(): int32;
 }
 
 // Auto-generated. Do not edit. Really.
