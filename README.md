@@ -1,22 +1,25 @@
+# sound level (dB) block
 
-> Open this page at [https://.github.io//](https://.github.io//)
+## Block Usage
+
+This extension adds one block to the "Input ... more" section.
+
+The ``||input.soundLevelDb||`` block returns the level of sound detected by the microphone in decibel (dB) units.
+
+```blocks
+basic.showNumber(input.soundLevelDb())
+```
+
+This block is compatible with micr:bit V2 only, if the block is used with a micro:bit V1 board the 927 error will scroll on the screen.
 
 ## Use as Extension
 
 This repository can be added as an **extension** in MakeCode.
 
-* open []()
+* open [https://makecode.microbit.org](https://makecode.microbit.org)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu
-* search for **https://github.com/** and import
-
-## Edit this project
-
-To edit this repository in MakeCode.
-
-* open []()
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/** and click import
+* search for **Sound Level in decibels** and import
 
 #### Metadata (used for search, rendering)
 
