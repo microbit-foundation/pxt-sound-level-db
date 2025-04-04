@@ -42,6 +42,7 @@ int scaleLowerDbValues(int value) {
     return MIN_DB + (int)(RANGE_DB * nonLinearFraction);
 }
 
+/** The C++ function that return sound level in decibels  */
 //% blockId=device_get_sound_level_db
 int soundLevelDbC() {
 #if MICROBIT_CODAL
