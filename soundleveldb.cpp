@@ -5,25 +5,17 @@
 #endif
 
 namespace input {
-/**
-* IGNORE THIS VERSION, only used for testing.
-*/
-// <-- During testing you can add the % sign here to export it to TS
-int soundLevelDbOriginal() {
-#if MICROBIT_CODAL
-    int originalUnit = uBit.audio.levelSPL->unit;
-    float soundDb = uBit.audio.levelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
-    uBit.audio.levelSPL->unit = originalUnit;
-    return (int)soundDb;
+
+#if (!defined(CODAL_VERSION_MAJOR) || !defined(CODAL_VERSION_MINOR)) || (CODAL_VERSION_MAJOR < 1 && CODAL_VERSION_MINOR < 3)
+    // #warning "COMPILING PRE_REFACTOR"
+    #define CODAL_PRE_SOUND_REFACTOR 1
 #else
-    target_panic(PANIC_VARIANT_NOT_SUPPORTED);
-    return 0;
+    // #warning "COMPILING REFACTORED"
+    #define CODAL_PRE_SOUND_REFACTOR 0
 #endif
-}
 
-
-int scaleLowerDbValues(int value) {
-    // From values about 70 db y is accurate, for values below we need to weight it
+int preRefactorScaleLowerDbValues(int value) {
+    // From values about 65-70 db y is accurate, for values below we need to weight it
     if (value > 65) {
         return value;
     }
@@ -42,18 +34,26 @@ int scaleLowerDbValues(int value) {
     return MIN_DB + (int)(RANGE_DB * nonLinearFraction);
 }
 
-/** The C++ function that return sound level in decibels  */
+/** The C++ function that returns sound level in decibels  */
 //% blockId=device_get_sound_level_db
 int soundLevelDbC() {
 #if MICROBIT_CODAL
-    static LevelDetectorSPL *localLevelSPL = NULL;
-    const int DEVICE_ID_UNUSED = 50;
-    if (localLevelSPL == NULL) {
-        // Lower gain and lower min value than default uBit.audio.levelSPL
-        localLevelSPL = new LevelDetectorSPL(*(uBit.audio.rawSplitter->createChannel()), 200.0, 1.0, 12.0, 50.0, DEVICE_ID_UNUSED, true);
-    }
-    int localLevelValue = localLevelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
-    return scaleLowerDbValues(localLevelValue);
+    #if CODAL_PRE_SOUND_REFACTOR == 1
+        // CODAL had a couple of issues in the Level Detector SPL:
+        // - Min dB value was set to 52 dB (too high, it is capable to measure 30ish dB)
+        // - The dB values returned were not accurate compared with external tools and older CODAL versions
+        static LevelDetectorSPL *localLevelSPL = NULL;
+        const int DEVICE_ID_UNUSED = 50;
+        if (localLevelSPL == NULL) {
+            // Lower gain and lower min value than default uBit.audio.levelSPL
+            localLevelSPL = new LevelDetectorSPL(*(uBit.audio.rawSplitter->createChannel()), 200.0, 1.0, 12.0, 50.0, DEVICE_ID_UNUSED, true);
+        }
+        int localLevelValue = localLevelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
+        return preRefactorScaleLowerDbValues(localLevelValue);
+    #else
+        // The CODAL refactor from v0.3.0 fixes these issues
+        return uBit.audio.levelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
+    #endif
 #else
     target_panic(PANIC_VARIANT_NOT_SUPPORTED);
     return 0;
