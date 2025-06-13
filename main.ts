@@ -1,14 +1,16 @@
 let maxSound = 0
-let soundLevel = 0
+let soundLevelDb = 0
+let soundLevel8bit = 0
 basic.forever(function () {
-    soundLevel = input.soundLevelDb()
-    serial.writeLine("" + (soundLevel))
+    soundLevelDb = input.soundLevelDb()
+    soundLevel8bit = input.soundLevel()
+    serial.writeLine("" + soundLevelDb + "; " + soundLevel8bit)
     led.plotBarGraph(
-    Math.map(soundLevel, 30, 120, 0, 25),
+    Math.map(soundLevelDb, 35, 100, 0, 25),
     25
     )
-    if (soundLevel > maxSound) {
-        maxSound = soundLevel
+    if (soundLevelDb > maxSound) {
+        maxSound = soundLevelDb
     }
 })
 
