@@ -6,6 +6,11 @@
 
 namespace input {
 
+// CODAL v0.3.0 has a working sound level in DB, but has the following issue:
+// https://github.com/lancaster-university/codal-microbit-v2/issues/489
+// It has only been deployed to MakeCode beta, so we expect the final
+// MakeCode 2025 release (not yet released) to be with CODAL v0.3.1 with a fix.
+// In the meantime, the extension will continue to use the workaround.
 #if (!defined(CODAL_VERSION_MAJOR) || !defined(CODAL_VERSION_MINOR)) || (CODAL_VERSION_MAJOR < 1 && CODAL_VERSION_MINOR < 3)
     // #warning "COMPILING PRE_REFACTOR"
     #define CODAL_PRE_SOUND_REFACTOR 1
@@ -38,7 +43,6 @@ int preRefactorScaleLowerDbValues(int value) {
 //% blockId=device_get_sound_level_db
 int soundLevelDbC() {
 #if MICROBIT_CODAL
-    #if CODAL_PRE_SOUND_REFACTOR == 1
         // CODAL had a couple of issues in the Level Detector SPL:
         // - Min dB value was set to 52 dB (too high, it is capable to measure 30ish dB)
         // - The dB values returned were not accurate compared with external tools and older CODAL versions
@@ -46,14 +50,17 @@ int soundLevelDbC() {
         const int DEVICE_ID_UNUSED = 50;
         if (localLevelSPL == NULL) {
             // Lower gain and lower min value than default uBit.audio.levelSPL
-            localLevelSPL = new LevelDetectorSPL(*(uBit.audio.rawSplitter->createChannel()), 200.0, 1.0, 12.0, 50.0, DEVICE_ID_UNUSED, true);
+            #if CODAL_PRE_SOUND_REFACTOR == 1
+                localLevelSPL = new LevelDetectorSPL(*(uBit.audio.rawSplitter->createChannel()), 200.0, 1.0, 12.0, 50.0, DEVICE_ID_UNUSED, true);
+            #else
+                localLevelSPL = new LevelDetectorSPL(*(uBit.audio.rawSplitter->createChannel()), 200.0, 1.0, 12.0, 30.0, DEVICE_ID_UNUSED);
+            #endif
         }
         int localLevelValue = localLevelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
         return preRefactorScaleLowerDbValues(localLevelValue);
-    #else
-        // The CODAL refactor from v0.3.0 fixes these issues
-        return uBit.audio.levelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
-    #endif
+
+        // In the future, CODAL refactor from v0.3.0 can just call this instead
+        // return uBit.audio.levelSPL->getValue(LEVEL_DETECTOR_SPL_DB);
 #else
     target_panic(PANIC_VARIANT_NOT_SUPPORTED);
     return 0;
