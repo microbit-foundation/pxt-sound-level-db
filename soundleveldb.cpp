@@ -8,8 +8,8 @@ namespace input {
 
 // CODAL v0.3.0 has a working sound level in DB, but has the following issue:
 // https://github.com/lancaster-university/codal-microbit-v2/issues/489
-// It has only been deployed to MakeCode beta, so we expect the final
-// MakeCode 2025 release (not yet released) to be with CODAL v0.3.1 with a fix.
+// It has been deployed to MakeCode live on the 16th of July 2025.
+// The fix should be released with CODAL v0.3.2.
 // In the meantime, the extension will continue to use the workaround.
 #if (!defined(CODAL_VERSION_MAJOR) || !defined(CODAL_VERSION_MINOR)) || (CODAL_VERSION_MAJOR < 1 && CODAL_VERSION_MINOR < 3)
     // #warning "COMPILING PRE_REFACTOR"
@@ -43,7 +43,7 @@ int preRefactorScaleLowerDbValues(int value) {
 //% blockId=device_get_sound_level_db
 int soundLevelDbC() {
 #if MICROBIT_CODAL
-        // CODAL had a couple of issues in the Level Detector SPL:
+        // CODAL v0.2.x had a couple of issues in the Level Detector SPL:
         // - Min dB value was set to 52 dB (too high, it is capable to measure 30ish dB)
         // - The dB values returned were not accurate compared with external tools and older CODAL versions
         static LevelDetectorSPL *localLevelSPL = NULL;

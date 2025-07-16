@@ -15,8 +15,10 @@ basic.forever(function () {
 })
 
 input.onButtonPressed(Button.A, function () {
+    serial.writeLine("" + (maxSound))
     basic.showNumber(maxSound)
 })
 input.onButtonPressed(Button.B, function () {
+    serial.writeLine("" + (input.soundLevelDb()))
     basic.showNumber(input.soundLevelDb())
 })
