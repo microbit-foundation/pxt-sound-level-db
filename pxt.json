@@ -1,6 +1,6 @@
 {
     "name": "Sound Level in decibels (dB)",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "description": "Get the micro:bit V2 sound level in decibels (dB) - beta",
     "license": "MIT",
     "dependencies": {
