@@ -18,12 +18,10 @@ namespace input {
     // #warning "COMPILING REFACTORED"
     #define CODAL_PRE_SOUND_REFACTOR 0
 
-    // There is a specific workaround for v0.3.0, deployed to MakeCode live.
-    #if CODAL_VERSION_MAJOR == 0 && CODAL_VERSION_MINOR == 3 && CODAL_VERSION_PATCH == 0
-        #define CODAL_0_3_0 1
-    #else
-        #define CODAL_0_3_0 0
-    #endif
+    // There is a specific workaround for v0.3.0+.
+    // https://github.com/lancaster-university/codal-microbit-v2/issues/503
+    // Once fixed it should be updated to only apply it to the right CODAL version range.
+    #define CODAL_0_3_X_SOUNDLEVEL_WORKAROUND 1
 #endif
 
 int preRefactorScaleLowerDbValues(int value) {
@@ -64,7 +62,7 @@ int soundLevelDbC() {
             #endif
         }
 
-        #if CODAL_0_3_0 == 1
+        #if CODAL_0_3_X_SOUNDLEVEL_WORKAROUND == 1
             // UGLY WORKAROUND FOR CODAL v0.3.0 deployed to MakeCode live.
             // A LevelDetectorSPL can lock up waiting for data, but calling it multiple
             // times in a row will eventually return values.
