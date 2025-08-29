@@ -24,4 +24,16 @@ namespace input {
         const MICROPHONE_MAX = 100.0;
         return Math.floor(input.soundLevel() * (MICROPHONE_MAX-MICROPHONE_MIN) / 255.0) + MICROPHONE_MIN;
     }
+
+    // In v0.1.8 the soundLevelDb() Block ID was changed from input_soundLevelDbOriginal
+    // to input_soundLevelDb. This breaks upgrading older projects as the old block ID
+    // is not found. Reverting the block ID would then break upgrading projects
+    // created after v0.1.8, so this alias provides both IDs for the same function.
+    //% blockId=input_soundLevelDbOriginal
+    //% block="sound level (dB)"
+    //% deprecated=1
+    //% blockAliasFor="input.soundLevelDb"
+    export function _soundLevelDbAlias(): number {
+        return 0;
+    }
 }
